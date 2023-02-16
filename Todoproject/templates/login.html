@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css"  href="{% static 'static/login.css' %}">
+    <script src="/static/app.js"></script>
+</head>
+<body>
+    <div class="imgbx">
+    </div>
+    <div class="contentbx">
+        <div class="formbx">
+            <h2>TODO App Login</h2>
+                <form onsubmit="return validateform()"  method="POST">
+                    {% csrf_token %}
+                    <div class="inputbx">
+                        <span>Name</span>
+                        <input type="text" class="input" name="uname" id="user-id">
+                        <span>Password</span>
+                        <input type="password" class="input" name="pwd" id="password-id">
+                        <button type="submit" class="btn">Login</button>
+                        <p>Don't have an account? <a href="reg">Sign up</a></p>
+                    </div>
+                </form>
+                <div class="msg">
+                    {% for message in messages %}
+                    <h3>{{message}}</h3>
+                    {% endfor %}
+                </div>
+        </div>
+    </div>
+</body>
+</html>

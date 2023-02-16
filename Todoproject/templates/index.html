@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project</title>
+    <link rel="stylesheet" href="{% static 'static/index.css' %}">
+    <link rel="stylesheet" href='{% static "index.css" %}'>
+
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="/static/app.js"></script>
+</head>
+<body>
+    {% if user.is_authenticated %}
+        <div style="margin-left: 20px; margin-top: 25px; height: 30px;">
+            <span><b>Hello, {{user.username}}</b></span>
+            <a href="signout" name="outlink" style="margin-left:1050px;">Logout</a>
+        </div>
+
+    {% else %}
+            
+    <a href="{% url 'userin' %}">Login</a>
+
+    {% endif %}
+    
+    <div class="container">
+        {% for message in messages %}
+        <div class="alert alert-{{message.tag}} alert-dismissible fade show" role="alert" id="message">
+            <strong>message: </strong> {{message}}
+        </div>
+        {% endfor %}
+        
+        <div class="input_div">
+            <form onsubmit="return inputvalidation()" action="" id="taskform" method="post">
+                {% csrf_token %}
+                <input class="input" type="text" name="taskinput" id="input-id" placeholder="what do you want to do...?">
+                <input type="hidden" name="task-id" id="task-id">
+                <button class="addbtn" title="+">+</button>
+            </form>
+        </div>
+        
+        <div id="tasks">
+            <ul class="list">
+                {% for i in name %}
+                <div class="tasks">
+                    <li class="checked">
+                        {% if i.completed == True %}
+                        <strike>{{i.title}}</strike>
+
+                        <button class="editbtn" data-id="{{i.id}}" data-title="{{i.title}}">Edit</button>
+                        <button class="undo"><a href="/action?id={{i.id}}&&action=undo">Undo</a></button>
+                        <button class="deletebtn"><a href="/action?id={{i.id}}&&action=delete">Delete</a></button>
+                        {% else %}
+                        {{i.title}}
+
+                        
+                        <button class="editbtn" data-id="{{i.id}}" data-title="{{i.title}}">Edit</button>
+                        <button class="done"><a href="/action?id={{i.id}}&&action=done">Done</a></button>
+                        <button class="deletebtn"><a href="/action?id={{i.id}}&&action=delete">Delete</a></button>
+
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    <script>
+        $(function (){
+            $('task-id').val("");
+            $('.editbtn').click(function (){
+                var task_id = $(this).attr("data-id")
+                var task_title = $(this).attr("data-title")
+                $('#input-id').val(task_title);
+                $('#task-id').val(task_id);
+                $('.addbtn').html('save');
+            });
+        })
+    </script>
+</body>
+</html>
